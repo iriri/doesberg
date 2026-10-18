@@ -164,6 +164,9 @@ macro_rules! emplace {
    (@init [$($x:tt)+], <- $($xs:tt)+) => {
       $crate::emplace!(@tag $($x)+, [], $($xs)+)
    };
+   (@init [$($x:tt)+], $y:tt $($xs:tt)+) => {
+      $crate::emplace!(@init [$($x)+$y], $($xs)+)
+   };
    (@$($xs:tt)*) => {
       compile_error!("Failed to match rule")
    };
@@ -202,7 +205,8 @@ mod test {
       let (y, &mut z) = emplace!(x <- Foo::B { bar: 1, baz: 2 });
       assert_eq!(*y, 1);
       assert_eq!(z, 2);
-      let &mut n = emplace!(x <- Foo::A(3));
+      let x = &mut x;
+      let &mut n = emplace!(*x <- Foo::A(3));
       assert_eq!(n, 3);
    }
 
