@@ -1,0 +1,9 @@
+[package]
+name = "doesberg"
+version = "0.1.0"
+authors = ["iriri"]
+edition = "2024"
+
+repository = "https://github.com/iriri/doesberg"
+license = "BSD-3-Clause"
+description = "The style"

@@ -1,0 +1,6 @@
+group_imports = "StdExternalCrate"
+match_block_trailing_comma = true
+single_line_let_else_max_width = 0
+tab_spaces = 3
+use_field_init_shorthand = true
+use_small_heuristics = "Max"
