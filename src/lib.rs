@@ -1,5 +1,8 @@
 #![no_std]
 
+#[cfg(test)]
+extern crate self as doesberg;
+
 #[macro_export]
 macro_rules! emplace {
    (@tuple $x:expr, $p:path, [$a:expr, $b:expr, $c:expr, $d:expr, $e:expr, $f:expr, $g:expr, $h:expr$(,)?]) => {{
@@ -155,6 +158,9 @@ macro_rules! emplace {
    (@tag $x:expr, [$($p:tt)*], $p1:ident { $($xs:tt)* }) => {
       $crate::emplace!(@struct $x, $($p)*$p1, [$($xs)*])
    };
+   (@init [$($x:tt)+], <- ::$($xs:tt)+) => {
+      $crate::emplace!(@tag $($x)+, [::], $($xs)+)
+   };
    (@init [$($x:tt)+], <- $($xs:tt)+) => {
       $crate::emplace!(@tag $($x)+, [], $($xs)+)
    };
@@ -198,6 +204,13 @@ mod test {
       assert_eq!(z, 2);
       let &mut n = emplace!(x <- Foo::A(3));
       assert_eq!(n, 3);
+   }
+
+   #[test]
+   fn fine() {
+      let mut x = None;
+      let n = emplace!(x <- ::core::option::Option::Some(1));
+      assert_eq!(*n, 1);
    }
 
    struct Blah;
